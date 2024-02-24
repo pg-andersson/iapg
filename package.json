@@ -1,0 +1,15 @@
+{
+  "name": "iapg",
+  "version": "1.0.0",
+  "description": "",
+  "main": "iapg_server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node iapg_server.js"
+  },
+  "author": "PG Andersson",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

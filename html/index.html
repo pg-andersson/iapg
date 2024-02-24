@@ -1,0 +1,194 @@
+<!--
+This file is part of iapg (Interactive Photo Gallery).
+Copyright (C) 2024 PG Andersson <pg.andersson@gmail.com>.
+iapg is free software: you can redistribute it and/or modify it under the terms of GPL-3.0-or-later.
+This javascript shows thumbnails on the index page. 
+When a thumbnail is clicked the script will request the iapg_server.js to send the corresponding picture
+to its connected clients (show.html) for subsequent presentation.
+-->
+<!doctype html>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Photo Gallery</title>
+
+<style>
+html, body {
+	background-color: #808080;
+	margin: 0;
+	padding: 0;
+}
+
+h1 {
+	margin: 0;
+	padding: 0;
+	text-align: center;
+	font-size: 18px;
+	padding: 10px;
+	background-color: #e0e0e0;
+	color: black;
+}
+
+hr {
+	border: 1px dashed #a0a0a0;
+}
+
+h2 {
+	margin: 0;
+	padding: 0;
+	text-align: center;
+	font-size: 14px;
+	padding: 10px;
+	color: white;
+}
+
+p {
+	color: white;
+}
+
+img.pict_1 {
+	display: block; 
+	max-width: 180px;
+	max-height: 180px;
+	cursor: pointer;
+}
+
+img.pict {
+	display: block; 
+	max-width: 144px;
+	max-height: 144px;
+	border: 2px solid #dddddd;
+	border-radius: 4px;
+	padding: 5px;
+	cursor: pointer;
+}
+
+div.fg_list {
+	display: flex;
+	margin: 0;
+	padding: 0;
+	flex-wrap: wrap;
+	justify-content: left;
+	align-items: baseline;
+	gap: 20px;
+	border-bottom: 2px solid gray;
+}
+
+div.fg_list > div {
+	display: block;
+	margin: 0;
+	padding: 6px;
+	color: white;
+}
+
+div.fg_list_item_1 {
+	width:220px;
+	font-size: 14px;
+	text-align:left;
+	display:block;
+	background-color: transparent;
+	border: 1px solid transparent;
+	margin-right: 1px;
+	margin-bottom: 1px;
+	float:left;
+}
+
+div.fg_list_item {
+	width:170px;
+	font-size: 14px;
+	text-align:left;
+	display:block;
+	background-color: transparent;
+	border: 1px solid transparent;
+	margin-right: 1px;
+	margin-bottom: 1px;
+	float:left;
+}
+</style>
+
+<body>
+<h1>Click on a thumbnail to show the corresponding picture on the screens/projectors</h1>
+<br />
+</body>
+
+<script>
+
+"use strict"
+let member_fullname = ""
+
+function show_picture(evt) {
+	let url = evt.target.src
+	fetch("/show", {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/x-www-form-urlencoded",
+		},
+		body: "url=" + url ,
+	})
+		.then(function (r) {
+			console.log("r=",r)
+			return r.text()
+		})
+		.then(function (t) {
+			console.log("SHOW RESULT: " + t)
+		})
+		.catch(function (e) {
+			console.log("SHOW ERROR: " + e)
+		})
+}
+
+
+async function get_members_display_info() {
+    let response = await fetch("/list")
+    let members_display_info = await response.json()
+
+    for (let member in members_display_info) {
+		member_fullname = members_display_info[member].member_fullname
+		let h2_line = document.createElement("h2")
+		h2_line.innerText = "Photographer: " + members_display_info[member].member_fullname
+		document.body.appendChild(h2_line) 
+
+		// <div class="fg_list">
+		let fg_list = document.createElement("div")
+		fg_list.setAttribute("class", "fg_list")
+				
+		let i = 0
+		for (let pict of members_display_info[member].pictures) {	
+			// <div class="fg_list_item">
+			let fg_list_item = document.createElement("div")
+			fg_list_item.setAttribute("class", "fg_list_item")
+			
+			let img = new Image()
+			img.src = pict + "?member_fullname=" + member_fullname
+			if (i > 0) {		// The signature picture?
+				img.onclick = show_picture
+				img.setAttribute("class", "pict")
+			} else {
+				img.setAttribute("class", "pict_1")			
+			}
+			fg_list_item.appendChild(img)
+			
+			// /pictures/A Andersson/A good picture.jpg?member_fullname=A Andersson%club_name=xyz
+			let descr_tmp = ""
+			if (pict.endsWith(".jpg")) {
+				descr_tmp = pict.replace(".jpg", "")
+			}
+			if (pict.endsWith(".JPG")) {
+				descr_tmp = pict.replace(".JPG", "")
+			}
+			descr_tmp = descr_tmp.split("/").pop()			
+			let descr_line = document.createElement("p")			
+			descr_line.innerText = descr_tmp
+						
+			fg_list_item.appendChild(descr_line)			
+			fg_list.appendChild(fg_list_item)	
+			i++			
+		}
+		document.body.appendChild(fg_list) 				
+		
+		// New member next.
+		document.body.appendChild(document.createElement("hr"))  
+	}
+}
+
+get_members_display_info()
+
+</script>
