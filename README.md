@@ -22,6 +22,12 @@ Suppose one or a few photography clubs will have an interactive picture exhibiti
 - A client-side rendered webpage will display the pictures on screens/projectors on demand from a tablet or a slideshow.
 - A node.js JavaScript webserver application and a few scripts.
 
+### Demo
+**The control view**  
+![The control view](index.jpg)  
+
+**The display screen**  
+![The display screen](show.jpg)  
 
 ### The parts
 
