@@ -12,7 +12,6 @@ table, th, td {
 padding: 4px; cell-spacing: 8px; border: 1px solid black; border-spacing: 4px; border-collapse: collapse;
 }
 </style>
-</style>
 </head>
 <body>
 <h1>iapg (interactive photo gallery)</h1>
