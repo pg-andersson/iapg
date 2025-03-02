@@ -1,0 +1,29 @@
+<!DOCtype html>
+<html>
+<head>
+<title>Photo Gallery Kiosk Status</title><meta http-equiv='Content-type' content='text/html;charset=utf-8'>
+
+<STYLE type="text/css">
+body { margin: 16px; background-color: #e0e0e0;}
+div { margin: 16px; background-color: #e0e0e0;}
+.config_err { border: 5px red; background-color: #ffcccc;}
+.config_ok { color: green}
+
+</STYLE>
+
+<script> 
+function timer_refresh() { 
+	setTimeout(() => { document.getElementById("status_snapshot").submit() },30000) 
+	} 
+</script>
+
+</head>
+<body onload='timer_refresh()'> 
+ 
+<h2>Actual kiosk status. Updated every 30 seconds</h2>
+<form id="status_snapshot" action="/status_snapshot" method="POST"> 
+   <input type="hidden" name="x" value="x" >
+</form>
+
+</body>
+</html>

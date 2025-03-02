@@ -1,6 +1,6 @@
 <!--
 This file is part of iapg (Interactive Photo Gallery).
-Copyright (C) 2024 PG Andersson <pg.andersson@gmail.com>.
+Copyright (C) 2025 PG Andersson <pg.andersson@gmail.com>.
 iapg is free software: you can redistribute it and/or modify it under the terms of GPL-3.0-or-later.
 This javascript shows thumbnails on the index page. 
 When a thumbnail is clicked the script will request the iapg_server.js to send the corresponding picture
@@ -19,25 +19,50 @@ html, body {
 
 h1 {
 	margin: 0;
-	padding: 0;
 	text-align: center;
-	font-size: 18px;
+	font-size: 14px;
 	padding: 10px;
 	background-color: #e0e0e0;
 	color: black;
 }
 
+h1:hover {
+
+	background: #aaaaaa;
+}
+
+a:link {
+  text-decoration: none;
+}
+
+a:visited {
+  text-decoration: none;
+}
+
+a:hover {
+	text-decoration: none;
+	background: #bae498;
+}
+
 hr {
 	border: 1px dashed #a0a0a0;
 }
-
+	
 h2 {
 	margin: 0;
-	padding: 0;
 	text-align: center;
 	font-size: 14px;
 	padding: 10px;
 	color: white;
+}
+
+p.memb_na {
+	margin: 0;
+	text-align: left;
+	font-size: 14px;
+	padding: 10px;
+	background-color: #f8f8f8;
+	color: black;
 }
 
 p {
@@ -55,10 +80,14 @@ img.pict {
 	display: block; 
 	max-width: 144px;
 	max-height: 144px;
-	border: 2px solid #dddddd;
-	border-radius: 4px;
-	padding: 5px;
+	box-shadow: 8px 8px 15px rgba(0, 0, 0, 0.5);
+	border: 2px solid transparent;
 	cursor: pointer;
+}
+
+img.pict:hover {
+	border: 2px solid #dddddd; 
+	background: #aaaaaa;
 }
 
 div.fg_list {
@@ -68,7 +97,7 @@ div.fg_list {
 	flex-wrap: wrap;
 	justify-content: left;
 	align-items: baseline;
-	gap: 20px;
+	gap: 14px;
 	border-bottom: 2px solid gray;
 }
 
@@ -77,18 +106,6 @@ div.fg_list > div {
 	margin: 0;
 	padding: 6px;
 	color: white;
-}
-
-div.fg_list_item_1 {
-	width:220px;
-	font-size: 14px;
-	text-align:left;
-	display:block;
-	background-color: transparent;
-	border: 1px solid transparent;
-	margin-right: 1px;
-	margin-bottom: 1px;
-	float:left;
 }
 
 div.fg_list_item {
@@ -102,20 +119,99 @@ div.fg_list_item {
 	margin-bottom: 1px;
 	float:left;
 }
+
+div.memb {
+	margin: 0;
+	text-align: left;
+	font-size: 14px;
+	padding: 10px;
+	background-color: #f8f8f8;
+	color: black;
+}
+
+.memb {
+	position: sticky;
+	top: 0;
+}
+
+header {
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+html {
+   scroll-padding-top: 80px;
+}
+
+
+h2.pop {
+	margin: 0;
+	text-align: center;
+	font-size: 14px;
+	padding: 10px;
+	color: black;
+}
+
+p.pop {
+	color: black;
+}
+
+.popup {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.popup:target {
+    display: flex;
+}
+
 </style>
 
 <body>
-<h1>Click on a thumbnail to show the corresponding picture on the screens/projectors</h1>
-<br />
+<header>
+<h1>
+   <a href="#popup" style="padding: 10px 20px; background-color: #e0e0e0; color: black; text-decoration: none; border-radius: 5px;"><strong>IAPG</strong> (Interactive Photo Gallery)</a>
+</h1>
+
+<div id="memb" class="memb" >abc</div>
+</header>
+
+<div id="popup" class="popup">
+    <div class="popup-content">
+        <h2 class="pop">IAPG (Interactive Photo Gallery)</h2>
+        <p class="pop">is a free software</p>
+		<p class="pop">You can get it from github.com/pg-andersson/iapg</p>
+        <a href="#" style="display: inline-block; margin-top: 10px; padding:
+                           5px 10px; background-color: #dc3545; color: #fff; text-decoration:
+                           none; border-radius: 3px;">Close</a>
+    </div>
+</div>
 </body>
 
 <script>
 
 "use strict"
 let member_fullname = ""
+let id = ""
+let memb_nr = 0
 
+	
 function show_picture(evt) {
-	let url = evt.target.src
+	let url = evt.target.my_show_url
 	fetch("/show", {
 		method: "POST",
 		headers: {
@@ -139,17 +235,34 @@ function show_picture(evt) {
 async function get_members_display_info() {
     let response = await fetch("/list")
     let members_display_info = await response.json()
+	//<a href="#f1">Fotograf 1</a>
+	memb_nr = 0	
+	let memb_na = "Photo: "
+    for (let member in members_display_info) {
+		memb_nr++
+		member_fullname = members_display_info[member].member_fullname
+		id =  "#f" + memb_nr
+		memb_na = memb_na + ' <a href=' + id + '>' + members_display_info[member].member_fullname + "</a> | " 
+	}
+	let memb_list=document.getElementById("memb")
+	memb_list.innerHTML = memb_na
 
+	memb_nr = 0
     for (let member in members_display_info) {
 		member_fullname = members_display_info[member].member_fullname
+		memb_nr++
+		//<h2 id="f1">Fotograf 1</h2>		
 		let h2_line = document.createElement("h2")
-		h2_line.innerText = "Photographer: " + members_display_info[member].member_fullname
+		h2_line.innerText = "Photo: " + members_display_info[member].member_fullname
+		id =  "f" + memb_nr
+		h2_line.setAttribute("id", id)
 		document.body.appendChild(h2_line) 
-
+		
 		// <div class="fg_list">
 		let fg_list = document.createElement("div")
 		fg_list.setAttribute("class", "fg_list")
-				
+		
+		let club_name = members_display_info[member].club_name
 		let i = 0
 		for (let pict of members_display_info[member].pictures) {	
 			// <div class="fg_list_item">
@@ -157,7 +270,9 @@ async function get_members_display_info() {
 			fg_list_item.setAttribute("class", "fg_list_item")
 			
 			let img = new Image()
-			img.src = pict + "?member_fullname=" + member_fullname
+			img.src = "/thumb?pict=" + pict + "?member_fullname=" + member_fullname
+			img.my_show_url = pict + "?member_fullname=" + member_fullname + "&club_name=" + club_name
+			
 			if (i > 0) {		// The signature picture?
 				img.onclick = show_picture
 				img.setAttribute("class", "pict")
@@ -166,7 +281,7 @@ async function get_members_display_info() {
 			}
 			fg_list_item.appendChild(img)
 			
-			// /pictures/A Andersson/A good picture.jpg?member_fullname=A Andersson%club_name=xyz
+			// /pictures/A Andersson/A good picture.jpg?member_fullname=A Andersson&club_name=xyz
 			let descr_tmp = ""
 			if (pict.endsWith(".jpg")) {
 				descr_tmp = pict.replace(".jpg", "")
@@ -186,7 +301,7 @@ async function get_members_display_info() {
 		
 		// New member next.
 		document.body.appendChild(document.createElement("hr"))  
-	}
+	}				
 }
 
 get_members_display_info()

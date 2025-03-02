@@ -1,0 +1,29 @@
+<!DOCtype html>
+<html>
+<head>
+<title>Photo Gallery Kiosk Problem</title><meta http-equiv='Content-type' content='text/html;charset=utf-8'>
+
+<STYLE type="text/css">
+body { margin: 16px; background-color: #e0e0e0;}
+div { margin: 16px; background-color: #e0e0e0;}
+.config_err { border: 5px red; background-color: #ffcccc;}
+.config_ok { color: green}
+
+</STYLE>
+
+<script> 
+function timer_refresh() { 
+	setTimeout(() => { document.getElementById("kiosk_startup_problems").submit() },10000) 
+	} 
+</script>
+
+</head>
+<body onload='timer_refresh()'> 
+ 
+<h2>Kiosk startup problems. Updated every 10 seconds</h2>
+<form id="kiosk_startup_problems" action="/kiosk_startup_problems" method="POST"> 
+   <input type="hidden" name="x" value="x" >
+</form>
+
+</body>
+</html>

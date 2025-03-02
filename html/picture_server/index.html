@@ -1,0 +1,59 @@
+<!DOCtype html>
+<html>
+<head>
+<title>Photo Gallery Picture Server</title><meta http-equiv='Content-type' content='text/html;charset=utf-8'>
+
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
+
+<STYLE type="text/css">
+body { margin: 16px; #f8f8f8; }
+div { margin: 16px; background-color: #e0e0e0;}
+
+.config_err { border: 5px red; background-color: #ffcccc;}
+
+.config_ok { color: green}
+
+hr.dashed {
+  border-top: 1px dashed;
+}
+</STYLE>
+
+</head>
+<body>
+<hr>
+<h2>Server viewer</h2>
+
+<a href="./status_snapshot.html" target="_blank">Open a new window to continuously show the picture server status</a><br \>
+
+<div>
+<form action="/view_status" method="POST">
+ <input type="checkbox" id="errors" name="errors" value="errors">
+  <label for="errors">Show configuration errors that have stopped the system, and the actual runtime status</label><br \>
+
+  <input type="checkbox" id="config" name="config" value="config">
+  <label for="config"> The server configuration parameters (iapg_server.conf)</label><br \>
+ 
+  <input type="checkbox" id="clublist" name="clublist" value="clublist">
+  <label for="clublist"> The clubs to be part of the slideshows (iapg_clublist.conf)</label><br \>
+ 
+  <input type="checkbox" id="clubdir" name="clubdir" value="clubdir">
+  <label for="clubdir"> The Clubs, the Members and the Pictures</label><br \>
+ 
+  <input type="checkbox" id="tree" name="tree" value="tree">
+  <label for="dir"> The directory structure in a tree-like format</label><br \>
+   
+  <input type="checkbox" id="click_summary" name="click_summary" value="click_summary">
+  <label for="click_summary"> Click statistics summary</label><br \>
+
+  <input type="checkbox" id="list_clicks_per_day_and_tablet" name="list_clicks_per_day_and_tablet" value="list_clicks_per_day_and_tablet">
+  <label for="list_clicks_per_day_and_tablet"> Click statistics per day and tablet</label><br \>
+
+  <input type="checkbox" id="list_clicks_per_run_and_tablet" name="list_clicks_per_run_and_tablet" value="list_clicks_per_run_and_tablet">
+  <label for="list_clicks_per_run_and_tablet"> Click statistics per run and tablet</label><br \><br \>
+ 
+   <input type="submit" value="Get it">
+</form>
+</div>
+
+</body>
+</html>

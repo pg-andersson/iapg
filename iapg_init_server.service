@@ -1,0 +1,23 @@
+[Unit]
+Description=The purpose is to get the long running iapg_server_starter.sh started by this iapg_init_server.sh
+After=network-online.target
+
+StartLimitIntervalSec=110
+StartLimitBurst=5
+
+[Service]
+Type=forking
+Restart=on-failure
+RestartSec=30
+
+StandardOutput=append:/home/fg/iapg-main/var/log/iapg_init_server_systemd.log
+StandardError=append:/home/fg/iapg-main/var/log/iapg_init_server_systemd_err.log
+
+WorkingDirectory=/home/fg/iapg-main/
+ExecStart=/bin/bash ./iapg_init_server.sh
+
+User=fg
+Group=fg
+
+[Install]
+WantedBy=network-online.target

@@ -1,0 +1,36 @@
+<!DOCtype html>
+<html>
+<head>
+<title>Photo Gallery Kiosk</title><meta http-equiv='Content-type' content='text/html;charset=utf-8'>
+
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
+
+<STYLE type="text/css">
+body { margin: 16px; }
+div { margin: 16px; background-color: #e0e0e0;}
+.config_err { border: 5px red; background-color: #ffcccc;}
+.config_ok { color: green}
+
+</STYLE>
+
+</head>
+<body>
+<hr>
+<h1>Kiosk viewer</h1>
+
+<a href="./status_snapshot.html" target="_blank">Open a separate window to continuously show the kiosk status</a><br \>
+
+<div>
+<form action="/view_status" method="POST">
+  <input type="checkbox" id="errors" name="errors" value="errors" checked>
+  <label for="errors">Show configuration errors that has stopped the system, and the actual runtime status</label><br \>
+   
+  <input type="checkbox" id="config" name="config" value="config">
+  <label for="config"> The iapg_kiosk.conf</label><br \><br \>
+ 
+  <input type="submit" value="Get it">
+</form>
+</div>
+
+</body>
+</html>

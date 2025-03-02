@@ -1,6 +1,6 @@
 <!--
 This file is part of iapg (Interactive Photo Gallery).
-Copyright (C) 2024 PG Andersson <pg.andersson@gmail.com>.
+Copyright (C) 2025 PG Andersson <pg.andersson@gmail.com>.
 iapg is free software: you can redistribute it and/or modify it under the terms of GPL-3.0-or-later
 This javascript shows pictures on requests from index.html via the iapg_server.js.
 -->
@@ -8,7 +8,7 @@ This javascript shows pictures on requests from index.html via the iapg_server.j
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Photo Gallery</title>
+<title id=title>Photo Gallery</title>
 
 <style>
 body {
@@ -26,7 +26,7 @@ img.pict {
 	position: absolute;
 	top: 40px;
 	max-width: calc(100dvw - 32px);
-	max-height: calc(100dvh - 48px);
+	max-height: calc(100dvh - 52px);
 }
 
 #screen_header {
@@ -54,6 +54,15 @@ img.pict {
 #error:empty {
 	display: none;
 }
+
+.footer { 
+	font-size: 8pt;
+    position: absolute; 
+    bottom: 0; 
+    left: 0; 
+    z-index: -1;
+}
+
 </style>
 </head>
 
@@ -61,6 +70,7 @@ img.pict {
 	<p id=screen_header>Nothing yet</p>  	
 	<img class="pict" id="picture" src="photo-camera.svg" >
 	<div id="error">Connecting...</div>
+	<div class="footer" id="myip" ></div>
 </body>
 </html>
 
@@ -71,31 +81,38 @@ var event_source
 
 function start_event_source() {
 	if (!event_source || event_source.readyState === 2) {
-		//console.log("STARTING EVENT SOURCE")
+		console.log("STARTING EVENT SOURCE")
 		event_source = new EventSource("/show-events")
 
 		event_source.addEventListener("show", function (evt) {
 			document.getElementById("error").textContent = ""
 			document.getElementById("picture").src = JSON.parse(evt.data)
+
 			let path_arg = JSON.parse(evt.data).split("/").pop()
 			let q = path_arg.split("?")	
 			let pict_name = q[0] 
 			let a = q[1].split("&")
 			let member_name = a[0].split("=").pop()
-			let club_name = a[1].split("=").pop()
-						
+			let club_name = a[1].split("=").pop()			
+			let my_ip = a[2].split("=").pop()
+			
 			// Erase the end .jpg." 			
 			let reg1 = /\.jpg$/i
 			pict_name = pict_name.replace(reg1, "")
 			
-			document.getElementById("screen_header").innerHTML = " " + club_name + "&nbsp&nbsp|&nbsp&nbsp " + member_name + "&nbsp&nbsp&nbsp&nbsp|&nbsp&nbsp " + pict_name 
+			document.getElementById("screen_header").innerHTML = " " + club_name + "&nbsp&nbsp|&nbsp&nbsp " + member_name + "&nbsp&nbsp&nbsp&nbsp|&nbsp&nbsp " + pict_name 			
+			if (my_ip != "none") {
+				document.getElementById("myip").innerHTML = " " + my_ip 
+			}
 		})
 
 		event_source.onerror = function (err) {
+			console.log("Disconnected...")
 			document.getElementById("error").textContent = "Disconnected..."
 		}
 
 		window.onbeforeunload = function (evt) {
+			console.log("event_source.close")
 			event_source.close()
 		}
 	}

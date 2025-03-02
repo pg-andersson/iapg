@@ -1,0 +1,14 @@
+[Unit]
+Description=Start the program that waits for a reboot command
+After=graphical.target
+
+[Service]
+Type=simple
+StandardOutput=append:/home/fg/iapg-main/var/log/iapg_kiosk_rebooter_systemd.log
+StandardError=append:/home/fg/iapg-main/var/log/iapg_kiosk_rebooter_systemd_err.log
+
+WorkingDirectory=/home/fg/iapg-main
+ExecStart=/bin/bash /home/fg/iapg-main/iapg_kiosk_rebooter.sh
+
+[Install]
+WantedBy=graphical.target

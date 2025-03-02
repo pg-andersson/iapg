@@ -1,0 +1,22 @@
+[Unit]
+Description=Get the long running iapg_kiosk.sh started by iapg_init_kiosk.sh
+After=graphical.target
+
+[Service]
+ExecStartPre=/bin/sleep 2
+Environment=DISPLAY=:0
+Environment=XAUTHORITY=/home/fg/.Xauthority
+Environment=XDG_RUNTIME_DIR="/run/user/1000"
+
+Type=forking
+StandardOutput=append:/home/fg/iapg-main/var/log/iapg_init_kiosk_systemd.log
+StandardError=append:/home/fg/iapg-main/var/log/iapg_init_kiosk_systemd_err.log
+
+WorkingDirectory=/home/fg/iapg-main/
+ExecStart=/bin/bash ./iapg_init_kiosk.sh
+
+User=fg
+Group=fg
+
+[Install]
+WantedBy=graphical.target
