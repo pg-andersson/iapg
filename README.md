@@ -1,19 +1,3 @@
-<!DOCtype html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>README</title>
-<style>
-/* Avoid page breaks inside the most common attributes, especially for exports (i.e. PDF) */
-td, h1, h2, h3, h4, h5, p, ul, ol, li {page-break-inside: avoid;}
-</style>
-<style>
-table, th, td {
-padding: 4px; cell-spacing: 8px; border: 1px solid black; border-spacing: 4px; border-collapse: collapse;
-}
-</style>
-</head>
-<body>
 <h1>iapg (interactive photo gallery)</h1>
 <h3>A system for interactive display of pictures - on multiple screens/projectors - controlled by tablets</h3>
 <h2>Purpose</h2>
@@ -677,8 +661,6 @@ The following statistics can be viewed from the monitoring web page.
 <p>Assume that you will have a show in a "gallery".<br> Bring along a router that is purely configured for your "showing"-LAN (No internet so the LAN will be fenced off from the world).<br>
 An attack from an intruder in your dedicated gallery LAN is then restricted to the router and the micro-SD cards in the Raspberry Pis. The tablets work as in any public area</p>
 <h4>Network problems</h4>
-<p>If there are network problems a kiosk will reboot and display the reason on the screen. 
+<p>If there are network problems a kiosk will reboot and display the reason on the screen.
 This will will go on until the network (router) is up again. Then the kiosk will boot into the normal slideshow behaviour.</p>
 <hr />
-</body>
-</html>
